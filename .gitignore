@@ -1,8 +1,8 @@
 # Composer
 composer.phar
-composer.json
-composer.lock
 /vendor/
+*.json
+*.lock
 
 # CakePHP 3
 

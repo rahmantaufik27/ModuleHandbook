@@ -5,7 +5,7 @@ use Google\Client;
 use Google\Service\Sheets;
 
 // Path ke file JSON kredensial
-$pathToJson = 'storied-precept-243308-e34a60c0b719.json';
+$pathToJson = 'storied-precept-243308-adf6b0bb18cb.json';
 
 // ID spreadsheet dan range data
 $spreadsheetId = '1HOkLicWIffmT7UxTqd2XNWKz5CmCLL5Ue9gO9rq5iBA';
