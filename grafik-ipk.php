@@ -147,17 +147,17 @@ function generateChart($ipk_distribution, $ipk_npm = null) {
     }
 
     // Draw title and axis labels
-    $title = 'Distribusi IPK';
+    $title = 'Distribusi IPK / GPA Distribution';
     $title_width = imagefontwidth(5) * strlen($title);
     imagestring($image, 5, intval($width / 2 - $title_width / 2), 30, $title, $text_color);
 
     // Draw Y-axis label
-    $y_axis_label = 'Frequency';
+    $y_axis_label = 'Frekuensi / Frequency';
     $y_axis_label_width = imagefontwidth(5) * strlen($y_axis_label);
     imagestringup($image, 5, 30, intval($height / 2 + $y_axis_label_width / 2), $y_axis_label, $text_color);
 
     // Draw X-axis label
-    $x_axis_label = 'IPK Range';
+    $x_axis_label = 'Rentang IPK / GPA Range';
     $x_axis_label_width = imagefontwidth(5) * strlen($x_axis_label);
     imagestring($image, 5, intval($width / 2 - $x_axis_label_width / 2), $height - 50, $x_axis_label, $text_color);
 
