@@ -1,0 +1,45 @@
+body{
+  margin: 20px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 18px;
+  text-align: left;
+}
+th, td {
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+th {
+  background-color: #f2f2f2;
+}
+tr[data-href] {
+  cursor: pointer;
+}
+tr[data-href]:hover {
+  background-color: #f8f8f8;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+}
+a:hover {
+  color: red;
+}
+.warning {
+    padding: 20px;
+    background-color: #f44336; /* Warna merah */
+    color: white;
+    margin-top: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+hr {
+  margin: 2em auto; /* centred margin */
+  height: 2px; /* thickness of the line */
+  background-color: #ddd; /* colour of the line */
+  border: none; /* no border */
+}
