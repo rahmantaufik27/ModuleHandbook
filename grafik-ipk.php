@@ -198,9 +198,11 @@ if (isset($_GET['chart']) && $_GET['chart'] === 'true') {
 
     <h2>Distribusi IPK / GPA Distribution</h2>
 
-    <?php if (!empty($ipk_npm)): ?>
-        <img src="?chart=true&npm=1717051024" alt="Grafik Distribusi IPK">
-    <?php endif; ?>
+    <?php 
+	$src = (!empty($_GET['npm'])) ? ("?chart=true&npm=".$_GET['npm']) : ("?chart=true" ); 
+   ?>
+        <img src="<?php echo $src; ?>" alt="Grafik Distribusi IPK">
+
     <table>
         <thead>
             <tr>
