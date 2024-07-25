@@ -26,16 +26,16 @@ $values = $response->getValues();
 
 $data = [];
 $ipk_distribution = [
-    ['range' => '(2, 2.2]', 'min' => 2.0, 'max' => 2.2, 'count' => 0],
-    ['range' => '(2.2, 2.4]', 'min' => 2.2, 'max' => 2.4, 'count' => 0],
-    ['range' => '(2.4, 2.6]', 'min' => 2.4, 'max' => 2.6, 'count' => 0],
-    ['range' => '(2.6, 2.8]', 'min' => 2.6, 'max' => 2.8, 'count' => 0],
-    ['range' => '(2.8, 3]', 'min' => 2.8, 'max' => 3.0, 'count' => 0],
-    ['range' => '(3, 3.2]', 'min' => 3.0, 'max' => 3.2, 'count' => 0],
-    ['range' => '(3.2, 3.4]', 'min' => 3.2, 'max' => 3.4, 'count' => 0],
-    ['range' => '(3.4, 3.6]', 'min' => 3.4, 'max' => 3.6, 'count' => 0],
-    ['range' => '(3.6, 3.8]', 'min' => 3.6, 'max' => 3.8, 'count' => 0],
-    ['range' => '(3.8, 4]', 'min' => 3.8, 'max' => 4.0, 'count' => 0],
+    ['range' => '(2, 2.2)', 'min' => 2.0, 'max' => 2.2, 'count' => 0],
+    ['range' => '(2.2, 2.4)', 'min' => 2.2, 'max' => 2.4, 'count' => 0],
+    ['range' => '(2.4, 2.6)', 'min' => 2.4, 'max' => 2.6, 'count' => 0],
+    ['range' => '(2.6, 2.8)', 'min' => 2.6, 'max' => 2.8, 'count' => 0],
+    ['range' => '(2.8, 3)', 'min' => 2.8, 'max' => 3.0, 'count' => 0],
+    ['range' => '(3, 3.2)', 'min' => 3.0, 'max' => 3.2, 'count' => 0],
+    ['range' => '(3.2, 3.4)', 'min' => 3.2, 'max' => 3.4, 'count' => 0],
+    ['range' => '(3.4, 3.6)', 'min' => 3.4, 'max' => 3.6, 'count' => 0],
+    ['range' => '(3.6, 3.8)', 'min' => 3.6, 'max' => 3.8, 'count' => 0],
+    ['range' => '(3.8, 4)', 'min' => 3.8, 'max' => 4.0, 'count' => 0],
 ];
 
 $ipk_npm = null;
@@ -83,9 +83,6 @@ if (!empty($values)) {
         }
     }
 }
-
-// print_r($ipk_distribution);
-// die();
 
 function generateChart($ipk_distribution, $ipk_npm = null) {
     $labels = array_column($ipk_distribution, 'range');
@@ -191,88 +188,8 @@ function generateChart($ipk_distribution, $ipk_npm = null) {
     imagedestroy($image);
 }
 
-function distribusi_ipk_to_image($ipk_distribution) {
-    // Settings for the image
-    $column_width = 80;
-    $padding = 5;
-    $row_height = 20;
-
-    // Calculate the size of the image
-    $width = $column_width * (count($ipk_distribution) + 1); // +1 for labels
-    $height = $row_height * 2 + $padding * 2; // Two rows (Range, Frequency)
-
-    // Create the image
-    $image = imagecreatetruecolor($width, $height);
-    $background_color = imagecolorallocate($image, 255, 255, 255); // White background
-    $text_color = imagecolorallocate($image, 0, 0, 0); // Black text
-    $border_color = imagecolorallocate($image, 0, 0, 0); // Black border
-
-    // Fill the background
-    imagefilledrectangle($image, 0, 0, $width, $height, $background_color);
-
-    // Set the font size and path (using built-in font)
-    $font_size = 3; // Using built-in font size (1 to 5, 1 being smallest)
-    $font_width = imagefontwidth($font_size);
-    $font_height = imagefontheight($font_size);
-
-    // Calculate horizontal positions for each column
-    $x_positions = [];
-    for ($i = 0; $i <= count($ipk_distribution); $i++) { // +1 for labels
-        $x_positions[] = $i * $column_width;
-    }
-
-    // Add labels
-    $label_range = 'Range';
-    $label_frequency = 'Frequency';
-    $range_label_x = (int)($padding + ($column_width - strlen($label_range) * $font_width) / 2);
-    $frequency_label_x = (int)($padding + ($column_width - strlen($label_frequency) * $font_width) / 2);
-    imagestring($image, $font_size, $range_label_x, $padding, $label_range, $text_color);
-    imagestring($image, $font_size, $frequency_label_x, $row_height + $padding, $label_frequency, $text_color);
-
-    // Add headers and data
-    foreach ($ipk_distribution as $index => $range) {
-        // Center the text for 'Rentang IPK'
-        $rentang_text = $range['range'];
-        $rentang_x = (int)($x_positions[$index + 1] + ($column_width - strlen($rentang_text) * $font_width) / 2);
-        imagestring($image, $font_size, $rentang_x, $padding, $rentang_text, $text_color);
-
-        // Center the text for 'Frekuensi'
-        $frekuensi_text = (string)$range['count'];
-        $frekuensi_x = (int)($x_positions[$index + 1] + ($column_width - strlen($frekuensi_text) * $font_width) / 2);
-        imagestring($image, $font_size, $frekuensi_x, $row_height + $padding, $frekuensi_text, $text_color);
-    }
-
-    // Draw the table borders
-    for ($i = 0; $i <= count($x_positions); $i++) {
-        $x = $x_positions[$i] ?? $width;
-        imageline($image, $x, 0, $x, $height, $border_color); // Left and right borders
-    }
-
-    // Draw top border
-    imageline($image, 0, 0, $width, 0, $border_color);
-    // Draw bottom border
-    imageline($image, 0, $height - 1, $width, $height - 1, $border_color);
-    // Draw middle border separating labels and data
-    imageline($image, 0, $row_height + $padding - 2, $width, $row_height + $padding - 2, $border_color);
-    // Draw right border
-    imageline($image, $width - 1, 0, $width - 1, $height, $border_color);
-
-    // Output the image as a PNG
-    header('Content-Type: image/png');
-    imagepng($image);
-    imagedestroy($image);
-}
-
-// Generate the chart image
-
 if (isset($_GET['chart']) && $_GET['chart'] === 'true') {
-    $chart_data=$ipk_distribution;
-    generateChart($chart_data, $ipk_npm);
-    exit;
-}
-if (isset($_GET['tableimage']) && $_GET['tableimage'] === 'true') {
-    $tabel_data=$ipk_distribution;
-    distribusi_ipk_to_image($tabel_data);
+    generateChart($ipk_distribution, $ipk_npm);
     exit;
 }
 ?>
@@ -299,11 +216,10 @@ if (isset($_GET['tableimage']) && $_GET['tableimage'] === 'true') {
     <h2>Distribusi IPK / GPA Distribution</h2>
 
     <?php 
-    $srcgrafik = (!empty($_GET['npm'])) ? ("?chart=true&npm=".$_GET['npm']) : ("?chart=true" );
-    $srctabimg = (!empty($_GET['npm'])) ? ("?tableimage=true&npm=".$_GET['npm']) : ("?chart=true" );
+  $src = (!empty($_GET['npm'])) ? ("?chart=true&npm=".$_GET['npm']) : ("?chart=true" ); 
    ?>
-        <img src="<?php echo $srcgrafik; ?>" alt="Grafik Distribusi IPK">
-        <img src="<?php echo $srctabimg; ?>" alt="Tabel Distribusi IPK">
+        <img src="<?php echo $src; ?>" alt="Grafik Distribusi IPK">
+
     <table>
         <thead>
             <tr>
@@ -313,15 +229,13 @@ if (isset($_GET['tableimage']) && $_GET['tableimage'] === 'true') {
             </tr>
         </thead>
         <tbody>
-            <?php
-            foreach ($ipk_distribution as $index => $ipkrange): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($index + 1); ?></td>
-                        <td><?php echo htmlspecialchars($ipkrange['range']); ?></td>
-                        <td><?php echo htmlspecialchars($ipkrange['count']); ?></td>
-                    </tr>
+            <?php foreach ($ipk_distribution as $index => $range): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($index + 1); ?></td>
+                    <td><?php echo htmlspecialchars($range['range']); ?></td>
+                    <td><?php echo htmlspecialchars($range['count']); ?></td>
+                </tr>
             <?php endforeach; ?>
-            
         </tbody>
     </table>
 
@@ -352,4 +266,3 @@ if (isset($_GET['tableimage']) && $_GET['tableimage'] === 'true') {
     </table>
 </body>
 </html>
-
