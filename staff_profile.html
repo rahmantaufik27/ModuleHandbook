@@ -148,15 +148,20 @@
                 gsInfo.innerHTML += last5Html;
 
                 fetch('https://ilkom.unila.ac.id/site/asiin/gs_api.php?user=' + gsId + '&sortby=citations')
-                    .then(response => response.json())
-                    .then(data => {
-                        var topCitedHtml = "<h4>Top 5 Most Cited Publications</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Citations</th></thead><tbody>";
-                        data.forEach(item => {
-                            topCitedHtml += "<tr><td>" + item.title + "</td><td>" + item.authors + "</td><td>" + item.publisher + "</td><td>" + item.year + "</td><td>" + item.cited + "</td></tr>";
-                        });
-                        topCitedHtml += "</tbody></table>";
-                        gsInfo.innerHTML += topCitedHtml;
+                .then(response => response.json())
+                .then(data => {
+                    var topCitedHtml = "<h4>Top 5 Most Cited Publications</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Citations</th></tr></thead><tbody>";
+
+                    // Use slice to limit the data to the first 5 items
+                    data.slice(0, 5).forEach(item => {
+                        topCitedHtml += "<tr><td>" + item.title + "</td><td>" + item.authors + "</td><td>" + item.publisher + "</td><td>" + item.year + "</td><td>" + item.cited + "</td></tr>";
                     });
+
+                    topCitedHtml += "</tbody></table>";
+                    gsInfo.innerHTML += topCitedHtml;
+                })
+                .catch(error => console.error('Error fetching top cited publications:', error));
+
             });
     }
 </script>
