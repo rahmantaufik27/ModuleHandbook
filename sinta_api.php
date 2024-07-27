@@ -178,7 +178,31 @@ function sintaSummary($sid) {
 }
 
 // Contoh penggunaan fungsi:
-if (isset($_GET['sid']) && isset($_GET['type']) && isset($_GET['type'])=="research") {
+if (isset($_GET['sid']) && isset($_GET['type'])) {
+    $sid = $_GET['sid'];
+    $type = $_GET['type'];
+
     header('Content-Type: application/json');
-    echo getResearchs($_GET['sid']);
+
+    switch ($type) {
+        case 'research':
+            echo getResearchs($sid);
+            break;
+        case 'cs':
+            echo getCSes($sid);
+            break;
+        case 'ipr':
+            echo getIPRs($sid);
+            break;
+        case 'scopus':
+            echo getScopusArticles($sid);
+            break;
+        case 'summary':
+            echo sintaSummary($sid);
+            break;
+        default:
+            echo json_encode(['error' => 'Invalid type specified.']);
+    }
+} else {
+    echo json_encode(['error' => 'Missing sid or type parameter.']);
 }
