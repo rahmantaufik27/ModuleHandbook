@@ -4,20 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .profile-container {
+            position: relative;
+        }
+        .profile-photo {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 150px;
+            height: auto;
+            border-radius: 50%;
+        }
+        .profile-info {
+            margin-left: 170px; /* Adjust based on photo width + some margin */
+        }
+    </style>
     <title>Staff Profile</title>
 </head>
 <body>
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-md-8">
-            <div id="profile-info"></div>
-        </div>
-        <div class="col-md-4 text-center">
-            <div id="profile-photo" class="img-thumbnail"></div>
-        </div>
+    <div class="profile-container">
+        <div id="profile-photo" class="profile-photo"></div>
+        <div id="profile-info" class="profile-info"></div>
     </div>
-    <div id="sinta-info" class="mt-4"><h3>Informasi SINTA</h3></div>
-    <div id="gs-info" class="mt-4"><h3>Informasi Google Scholar</h3></div>
+    <div id="sinta-info" class="mt-4"><h3>SINTA Information</h3></div>
+    <div id="gs-info" class="mt-4"><h3>Google Scholar Information</h3></div>
 </div>
 
 <script>
@@ -31,14 +43,14 @@
                 var profileInfo = document.getElementById('profile-info');
                 if (data) {
                     profileInfo.innerHTML = '<table class="table table-bordered">' +
-                        '<tr><th>Nama</th><td>' + data["NAME"] + '</td></tr>' +
+                        '<tr><th>Name</th><td>' + data["NAME"] + '</td></tr>' +
                         '<tr><th>NIDN</th><td>' + data["NIDN"] + '</td></tr>' +
-                        '<tr><th>Posisi</th><td>' + data["POSITION"] + '</td></tr>' +
-                        '<tr><th>Karir Akademik</th><td>' + data["ACADEMIC CAREER"] + '</td></tr>' +
-                        '<tr><th>Pendidikan</th><td>' +
-                        '<strong>S1:</strong> ' + data["Pendidikan S1"] + ' (Tahun: ' + data["Tahun Lulus S1"] + ')<br>' +
-                        '<strong>S2:</strong> ' + data["Pendidikan S2"] + ' (Tahun: ' + data["Tahun Lulus S2"] + ')<br>' +
-                        '<strong>S3:</strong> ' + (data["Pendidikan S3"] || '-') + ' (Tahun: ' + (data["Tahun Lulus S3"] || '-') + ')' +
+                        '<tr><th>Position</th><td>' + data["POSITION"] + '</td></tr>' +
+                        '<tr><th>Academic Career</th><td>' + data["ACADEMIC CAREER"] + '</td></tr>' +
+                        '<tr><th>Education</th><td>' +
+                        '<strong>Bachelor:</strong> ' + data["Pendidikan S1"] + ' (Year: ' + data["Tahun Lulus S1"] + ')<br>' +
+                        '<strong>Master:</strong> ' + data["Pendidikan S2"] + ' (Year: ' + data["Tahun Lulus S2"] + ')<br>' +
+                        '<strong>Doctorate:</strong> ' + (data["Pendidikan S3"] || '-') + ' (Year: ' + (data["Tahun Lulus S3"] || '-') + ')' +
                         '</td></tr>' +
                         '</table>';
 
@@ -50,7 +62,7 @@
                         fetchGSData(data["GS ID"]);
                     }
                 } else {
-                    profileInfo.innerHTML = '<div class="alert alert-danger">Profil tidak ditemukan.</div>';
+                    profileInfo.innerHTML = '<div class="alert alert-danger">Profile not found.</div>';
                 }
             })
             .catch(error => console.error('Error:', error));
@@ -66,13 +78,13 @@
                 if (data.profile_image) {
                     profilePhoto.innerHTML = '<img src="' + data.profile_image + '" alt="Profile Photo" class="img-fluid">';
                 } else {
-                    profilePhoto.innerHTML = 'Foto tidak tersedia';
+                    profilePhoto.innerHTML = 'Photo not available';
                 }
 
-                var summaryHtml = "<h4>Ringkasan SINTA</h4><table class='table table-striped'><thead><tr><th>Scopus</th><th>GScholar</th><th>WOS</th></tr></thead><tbody>";
-                summaryHtml += "<tr><td>Article: " + data.summary.Scopus.Article + "<br>Citation: " + data.summary.Scopus.Citation + "<br>Cited Document: " + data.summary.Scopus["Cited Document"] + "<br>H-Index: " + data.summary.Scopus["H-Index"] + "<br>i10-Index: " + data.summary.Scopus["i10-Index"] + "<br>G-Index: " + data.summary.Scopus["G-Index"] + "</td>";
-                summaryHtml += "<td>Article: " + data.summary.GScholar.Article + "<br>Citation: " + data.summary.GScholar.Citation + "<br>Cited Document: " + data.summary.GScholar["Cited Document"] + "<br>H-Index: " + data.summary.GScholar["H-Index"] + "<br>i10-Index: " + data.summary.GScholar["i10-Index"] + "<br>G-Index: " + data.summary.GScholar["G-Index"] + "</td>";
-                summaryHtml += "<td>Article: " + data.summary.WOS.Article + "<br>Citation: " + data.summary.WOS.Citation + "<br>Cited Document: " + data.summary.WOS["Cited Document"] + "<br>H-Index: " + data.summary.WOS["H-Index"] + "<br>i10-Index: " + data.summary.WOS["i10-Index"] + "<br>G-Index: " + data.summary.WOS["G-Index"] + "</td>";
+                var summaryHtml = "<h4>SINTA Summary</h4><table class='table table-striped'><thead><tr><th>Scopus</th><th>GScholar</th><th>WOS</th></tr></thead><tbody>";
+                summaryHtml += "<tr><td>Articles: " + data.summary.Scopus.Article + "<br>Citations: " + data.summary.Scopus.Citation + "<br>Cited Documents: " + data.summary.Scopus["Cited Document"] + "<br>H-Index: " + data.summary.Scopus["H-Index"] + "<br>i10-Index: " + data.summary.Scopus["i10-Index"] + "<br>G-Index: " + data.summary.Scopus["G-Index"] + "</td>";
+                summaryHtml += "<td>Articles: " + data.summary.GScholar.Article + "<br>Citations: " + data.summary.GScholar.Citation + "<br>Cited Documents: " + data.summary.GScholar["Cited Document"] + "<br>H-Index: " + data.summary.GScholar["H-Index"] + "<br>i10-Index: " + data.summary.GScholar["i10-Index"] + "<br>G-Index: " + data.summary.GScholar["G-Index"] + "</td>";
+                summaryHtml += "<td>Articles: " + data.summary.WOS.Article + "<br>Citations: " + data.summary.WOS.Citation + "<br>Cited Documents: " + data.summary.WOS["Cited Document"] + "<br>H-Index: " + data.summary.WOS["H-Index"] + "<br>i10-Index: " + data.summary.WOS["i10-Index"] + "<br>G-Index: " + data.summary.WOS["G-Index"] + "</td>";
                 summaryHtml += "</tr></tbody></table>";
                 sintaInfo.innerHTML += summaryHtml;
             });
@@ -80,7 +92,7 @@
         fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=research')
             .then(response => response.json())
             .then(data => {
-                var researchHtml = "<h4>Penelitian</h4><table class='table table-striped'><thead><tr><th>Judul</th><th>Ketua</th><th>Anggota</th><th>Sumber Dana</th><th>Tahun</th><th>Besar Dana</th></tr></thead><tbody>";
+                var researchHtml = "<h4>Research</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Leader</th><th>Members</th><th>Funding Source</th><th>Year</th><th>Amount</th></tr></thead><tbody>";
                 data.forEach(item => {
                     researchHtml += "<tr><td>" + item.title + "</td><td>" + item.leader + "</td><td>" + item.members.join(", ") + "</td><td>" + item.funding_source + "</td><td>" + item.year + "</td><td>" + item.amount + "</td></tr>";
                 });
@@ -91,7 +103,7 @@
         fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=ipr')
             .then(response => response.json())
             .then(data => {
-                var iprHtml = "<h4>IPR</h4><table class='table table-striped'><thead><tr><th>Judul</th><th>Inventor</th><th>Tahun</th><th>Nomor Permohonan</th><th>Jenis IPR</th></tr></thead><tbody>";
+                var iprHtml = "<h4>Intellectual Property Rights (IPR)</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Inventors</th><th>Year</th><th>Application Number</th><th>Type</th></thead><tbody>";
                 data.forEach(item => {
                     iprHtml += "<tr><td>" + item.title + "</td><td>" + item.inventors + "</td><td>" + item.year + "</td><td>" + item.application_number + "</td><td>" + item.ipr_type + "</td></tr>";
                 });
@@ -102,7 +114,7 @@
         fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=cs')
             .then(response => response.json())
             .then(data => {
-                var csHtml = "<h4>Layanan Masyarakat</h4><table class='table table-striped'><thead><tr><th>Judul</th><th>Ketua</th><th>Anggota</th><th>Sumber Dana</th><th>Tahun</th><th>Besar Dana</th></tr></thead><tbody>";
+                var csHtml = "<h4>Community Services</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Leader</th><th>Members</th><th>Funding Source</th><th>Year</th><th>Amount</th></thead><tbody>";
                 data.forEach(item => {
                     csHtml += "<tr><td>" + item.title + "</td><td>" + item.leader + "</td><td>" + item.members.join(", ") + "</td><td>" + item.funding_source + "</td><td>" + item.year + "</td><td>" + item.amount + "</td></tr>";
                 });
@@ -113,7 +125,7 @@
         fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=scopus')
             .then(response => response.json())
             .then(data => {
-                var scopusHtml = "<h4>Artikel Scopus</h4><table class='table table-striped'><thead><tr><th>Judul</th><th>Urutan Penulis</th><th>Quartile</th><th>Penerbit</th><th>Tahun</th><th>Sitasi</th></tr></thead><tbody>";
+                var scopusHtml = "<h4>Scopus Articles</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Author Order</th><th>Quartile</th><th>Publisher</th><th>Year</th><th>Citations</th></thead><tbody>";
                 data.forEach(item => {
                     scopusHtml += "<tr><td>" + item.title + "</td><td>" + item.author_order + "</td><td>" + item.quartile + "</td><td>" + item.publisher + "</td><td>" + item.year + "</td><td>" + item.cited + "</td></tr>";
                 });
@@ -128,7 +140,7 @@
         fetch('https://ilkom.unila.ac.id/site/asiin/gs_api.php?user=' + gsId + '&sortby=pubdate')
             .then(response => response.json())
             .then(data => {
-                var last5Html = "<h4>5 Publikasi Terakhir</h4><table class='table table-striped'><thead><tr><th>Judul</th><th>Penulis</th><th>Penerbit</th><th>Tahun</th><th>Sitasi</th></tr></thead><tbody>";
+                var last5Html = "<h4>Last 5 Publications</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Citations</th></thead><tbody>";
                 data.forEach(item => {
                     last5Html += "<tr><td>" + item.title + "</td><td>" + item.authors + "</td><td>" + item.publisher + "</td><td>" + item.year + "</td><td>" + item.cited + "</td></tr>";
                 });
@@ -138,7 +150,7 @@
                 fetch('https://ilkom.unila.ac.id/site/asiin/gs_api.php?user=' + gsId + '&sortby=citations')
                     .then(response => response.json())
                     .then(data => {
-                        var topCitedHtml = "<h4>5 Publikasi dengan Sitasi Terbanyak</h4><table class='table table-striped'><thead><tr><th>Judul</th><th>Penulis</th><th>Penerbit</th><th>Tahun</th><th>Sitasi</th></tr></thead><tbody>";
+                        var topCitedHtml = "<h4>Top 5 Most Cited Publications</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Citations</th></thead><tbody>";
                         data.forEach(item => {
                             topCitedHtml += "<tr><td>" + item.title + "</td><td>" + item.authors + "</td><td>" + item.publisher + "</td><td>" + item.year + "</td><td>" + item.cited + "</td></tr>";
                         });
