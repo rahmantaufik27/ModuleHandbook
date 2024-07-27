@@ -140,7 +140,7 @@
         fetch('https://ilkom.unila.ac.id/site/asiin/gs_api.php?user=' + gsId + '&sortby=pubdate')
             .then(response => response.json())
             .then(data => {
-                var last5Html = "<h4>Last 5 Publications</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Citations</th></thead><tbody>";
+                var last5Html = "<h4>Last Publications</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Citations</th></thead><tbody>";
                 data.forEach(item => {
                     last5Html += "<tr><td>" + item.title + "</td><td>" + item.authors + "</td><td>" + item.publisher + "</td><td>" + item.year + "</td><td>" + item.cited + "</td></tr>";
                 });
