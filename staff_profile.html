@@ -97,6 +97,7 @@
     function fetchSintaData(sid) {
         var sintaInfo = document.getElementById("sinta-info");
 
+        // Fetch Summary
         fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=summary')
             .then(response => response.json())
             .then(data => {
@@ -113,34 +114,54 @@
                 summaryHtml += "<td>Articles: " + data.summary.WOS.Article + "<br>Citations: " + data.summary.WOS.Citation + "<br>Cited Documents: " + data.summary.WOS["Cited Document"] + "<br>H-Index: " + data.summary.WOS["H-Index"] + "<br>i10-Index: " + data.summary.WOS["i10-Index"] + "<br>G-Index: " + data.summary.WOS["G-Index"] + "</td>";
                 summaryHtml += "</tr></tbody></table>";
                 sintaInfo.innerHTML += summaryHtml;
-            });
 
-        fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=research')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data && data.length > 0) {
-            var researchHtml = "<h4>Research</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Leader</th><th>Members</th><th>Funding Source</th><th>Year</th><th>Amount</th></tr></thead><tbody>";
-            data.forEach(item => {
-                var members = Object.values(item.members).join(", ");
-                researchHtml += "<tr><td>" + item.title + "</td><td>" + item.leader.replace('Leader : ', '') + "</td><td>" + members + "</td><td>" + item.funding_source + "</td><td>" + item.year + "</td><td>" + item.amount + "</td></tr>";
-            });
-            researchHtml += "</tbody></table>";
-            sintaInfo.innerHTML += researchHtml;
-        } else {
-            sintaInfo.innerHTML += '<div class="alert alert-warning">No Research data available.</div>';
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching Research data:', error);
-        sintaInfo.innerHTML += '<div class="alert alert-danger">Failed to load Research data. Please try again later.</div>';
-    });
+                // Fetch Research
+                return fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=research');
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.length > 0) {
+                    var researchHtml = "<h4>Research</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Leader</th><th>Members</th><th>Funding Source</th><th>Year</th><th>Amount</th></tr></thead><tbody>";
+                    data.forEach(item => {
+                        var members = Object.values(item.members).join(", ");
+                        researchHtml += "<tr><td>" + item.title + "</td><td>" + item.leader.replace('Leader : ', '') + "</td><td>" + members + "</td><td>" + item.funding_source + "</td><td>" + item.year + "</td><td>" + item.amount + "</td></tr>";
+                    });
+                    researchHtml += "</tbody></table>";
+                    sintaInfo.innerHTML += researchHtml;
+                } else {
+                    sintaInfo.innerHTML += '<div class="alert alert-warning">No Research data available.</div>';
+                }
 
-        fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=ipr')
+                // Fetch Community Services
+                return fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=cs');
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data && data.length > 0) {
+                    var csHtml = "<h4>Community Services</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Leader</th><th>Members</th><th>Funding Source</th><th>Year</th><th>Amount</th></tr></thead><tbody>";
+                    data.forEach(item => {
+                        var members = Object.values(item.members).join(", ");
+                        csHtml += "<tr><td>" + item.title + "</td><td>" + item.leader.replace('Leader : ', '') + "</td><td>" + members + "</td><td>" + item.funding_source + "</td><td>" + item.year + "</td><td>" + item.amount + "</td></tr>";
+                    });
+                    csHtml += "</tbody></table>";
+                    sintaInfo.innerHTML += csHtml;
+                } else {
+                    sintaInfo.innerHTML += '<div class="alert alert-warning">No Community Services data available.</div>';
+                }
+
+                // Fetch IPR
+                return fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=ipr');
+            })
             .then(response => response.json())
             .then(data => {
                 var iprHtml = "<h4>Intellectual Property Rights (IPR)</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Inventors</th><th>Year</th><th>Application Number</th><th>Type</th></thead><tbody>";
@@ -149,35 +170,10 @@
                 });
                 iprHtml += "</tbody></table>";
                 sintaInfo.innerHTML += iprHtml;
-            });
 
-        fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=cs')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok: ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data && data.length > 0) {
-                var csHtml = "<h4>Community Services</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Leader</th><th>Members</th><th>Funding Source</th><th>Year</th><th>Amount</th></tr></thead><tbody>";
-                data.forEach(item => {
-                    var members = Object.values(item.members).join(", ");
-                    csHtml += "<tr><td>" + item.title + "</td><td>" + item.leader.replace('Leader : ', '') + "</td><td>" + members + "</td><td>" + item.funding_source + "</td><td>" + item.year + "</td><td>" + item.amount + "</td></tr>";
-                });
-                csHtml += "</tbody></table>";
-                sintaInfo.innerHTML += csHtml;
-            } else {
-                sintaInfo.innerHTML += '<div class="alert alert-warning">No Community Services data available.</div>';
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching Community Services data:', error);
-            sintaInfo.innerHTML += '<div class="alert alert-danger">Failed to load Community Services data. Please try again later.</div>';
-        });
-
-
-        fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=scopus')
+                // Fetch Scopus Articles
+                return fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=scopus');
+            })
             .then(response => response.json())
             .then(data => {
                 var scopusHtml = "<h4>Scopus Articles</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Author Order</th><th>Quartile</th><th>Publisher</th><th>Year</th><th>Citations</th></thead><tbody>";
@@ -186,6 +182,10 @@
                 });
                 scopusHtml += "</tbody></table>";
                 sintaInfo.innerHTML += scopusHtml;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                sintaInfo.innerHTML += '<div class="alert alert-danger">Failed to load data. Please try again later.</div>';
             });
     }
 
@@ -203,19 +203,19 @@
                 gsInfo.innerHTML += last5Html;
 
                 fetch('https://ilkom.unila.ac.id/site/asiin/gs_api.php?user=' + gsId + '&sortby=citations')
-                .then(response => response.json())
-                .then(data => {
-                    var topCitedHtml = "<h4>Top 5 Most Cited Publications</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Citations</th></tr></thead><tbody>";
+                    .then(response => response.json())
+                    .then(data => {
+                        var topCitedHtml = "<h4>Top 5 Most Cited Publications</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Citations</th></tr></thead><tbody>";
 
-                    // Use slice to limit the data to the first 5 items
-                    data.slice(0, 5).forEach(item => {
-                        topCitedHtml += "<tr><td>" + item.title + "</td><td>" + item.authors + "</td><td>" + item.publisher + "</td><td>" + item.year + "</td><td>" + item.cited + "</td></tr>";
-                    });
+                        // Use slice to limit the data to the first 5 items
+                        data.slice(0, 5).forEach(item => {
+                            topCitedHtml += "<tr><td>" + item.title + "</td><td>" + item.authors + "</td><td>" + item.publisher + "</td><td>" + item.year + "</td><td>" + item.cited + "</td></tr>";
+                        });
 
-                    topCitedHtml += "</tbody></table>";
-                    gsInfo.innerHTML += topCitedHtml;
-                })
-                .catch(error => console.error('Error fetching top cited publications:', error));
+                        topCitedHtml += "</tbody></table>";
+                        gsInfo.innerHTML += topCitedHtml;
+                    })
+                    .catch(error => console.error('Error fetching top cited publications:', error));
             });
     }
 </script>
