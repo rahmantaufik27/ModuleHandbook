@@ -5,19 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .profile-container {
-            position: relative;
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
         }
-        .profile-photo {
-            position: absolute;
-            left: 0;
-            top: 0;
+        .profile-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .profile-photo img {
             width: 150px;
             height: auto;
             border-radius: 50%;
+            border: 4px solid #007bff;
         }
         .profile-info {
-            margin-left: 170px; /* Adjust based on photo width + some margin */
+            margin-left: 20px;
+            flex-grow: 1;
+        }
+        .section-title {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .table th {
+            width: 150px;
+            color: #495057;
+        }
+        .table {
+            background-color: white;
         }
     </style>
     <title>Staff Profile</title>
@@ -28,8 +48,12 @@
         <div id="profile-photo" class="profile-photo"></div>
         <div id="profile-info" class="profile-info"></div>
     </div>
-    <div id="sinta-info" class="mt-4"><h3>SINTA Information</h3></div>
-    <div id="gs-info" class="mt-4"><h3>Google Scholar Information</h3></div>
+    <div id="sinta-info" class="mt-4">
+        <h3 class="section-title">SINTA Information</h3>
+    </div>
+    <div id="gs-info" class="mt-4">
+        <h3 class="section-title">Google Scholar Information</h3>
+    </div>
 </div>
 
 <script>
