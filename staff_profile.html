@@ -6,30 +6,60 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .profile-container {
-            position: relative;
+            display: flex;
+            align-items: flex-start;
+            margin-top: 30px;
         }
         .profile-photo {
-            position: absolute;
-            left: 0;
-            top: 0;
             width: 150px;
-            height: auto;
+            height: 150px;
             border-radius: 50%;
+            border: 2px solid #007BFF;
+            overflow: hidden;
+            flex-shrink: 0;
         }
         .profile-info {
-            margin-left: 170px; /* Adjust based on photo width + some margin */
+            margin-left: 20px;
+            max-width: calc(100% - 170px);
+        }
+        .profile-info ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .profile-info ul li {
+            margin-bottom: 10px;
+        }
+        .profile-info ul li strong {
+            color: #007BFF;
+        }
+        .section-title {
+            color: #007BFF;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #007BFF;
+            display: inline-block;
+        }
+        .table-striped th, .table-striped td {
+            vertical-align: top;
         }
     </style>
     <title>Staff Profile</title>
 </head>
 <body>
-<div class="container mt-5">
+<div class="container">
     <div class="profile-container">
         <div id="profile-photo" class="profile-photo"></div>
-        <div id="profile-info" class="profile-info"></div>
+        <div id="profile-info" class="profile-info">
+            <ul id="profile-details"></ul>
+        </div>
     </div>
-    <div id="sinta-info" class="mt-4"><h3>SINTA Information</h3></div>
-    <div id="gs-info" class="mt-4"><h3>Google Scholar Information</h3></div>
+    <div id="sinta-info" class="mt-4">
+        <h3 class="section-title">SINTA Information</h3>
+    </div>
+    <div id="gs-info" class="mt-4">
+        <h3 class="section-title">Google Scholar Information</h3>
+    </div>
 </div>
 
 <script>
@@ -40,19 +70,22 @@
         fetch(profileUrl)
             .then(response => response.json())
             .then(data => {
-                var profileInfo = document.getElementById('profile-info');
+                var profileInfo = document.getElementById('profile-details');
                 if (data) {
-                    profileInfo.innerHTML = '<table class="table table-bordered">' +
-                        '<tr><th>Name</th><td>' + data["NAME"] + '</td></tr>' +
-                        '<tr><th>NIDN</th><td>' + data["NIDN"] + '</td></tr>' +
-                        '<tr><th>Position</th><td>' + data["POSITION"] + '</td></tr>' +
-                        '<tr><th>Academic Career</th><td>' + data["ACADEMIC CAREER"] + '</td></tr>' +
-                        '<tr><th>Education</th><td>' +
-                        '<strong>Bachelor:</strong> ' + data["Pendidikan S1"] + ' (Year: ' + data["Tahun Lulus S1"] + ')<br>' +
-                        '<strong>Master:</strong> ' + data["Pendidikan S2"] + ' (Year: ' + data["Tahun Lulus S2"] + ')<br>' +
-                        '<strong>Doctorate:</strong> ' + (data["Pendidikan S3"] || '-') + ' (Year: ' + (data["Tahun Lulus S3"] || '-') + ')' +
-                        '</td></tr>' +
-                        '</table>';
+                    document.getElementById('profile-photo').innerHTML = '<img src="' + (data["PHOTO"] || 'default-photo.jpg') + '" alt="Profile Photo" class="img-fluid">';
+                    profileInfo.innerHTML = `
+                        <li><strong>Name:</strong> ${data["NAME"]}</li>
+                        <li><strong>NIDN:</strong> ${data["NIDN"]}</li>
+                        <li><strong>Position:</strong> ${data["POSITION"]}</li>
+                        <li><strong>Academic Career:</strong> ${data["ACADEMIC CAREER"]}</li>
+                        <li><strong>Education:</strong>
+                            <ul>
+                                <li><strong>Bachelor:</strong> ${data["Pendidikan S1"]} (Year: ${data["Tahun Lulus S1"]})</li>
+                                <li><strong>Master:</strong> ${data["Pendidikan S2"]} (Year: ${data["Tahun Lulus S2"]})</li>
+                                <li><strong>Doctorate:</strong> ${data["Pendidikan S3"] || '-'} (Year: ${data["Tahun Lulus S3"] || '-'})</li>
+                            </ul>
+                        </li>
+                    `;
 
                     if (data["SINTA ID"]) {
                         fetchSintaData(data["SINTA ID"]);
@@ -74,63 +107,42 @@
         fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=summary')
             .then(response => response.json())
             .then(data => {
-                var profilePhoto = document.getElementById('profile-photo');
-                if (data.profile_image) {
-                    profilePhoto.innerHTML = '<img src="' + data.profile_image + '" alt="Profile Photo" class="img-fluid">';
-                } else {
-                    profilePhoto.innerHTML = 'Photo not available';
-                }
-
-                var summaryHtml = "<h4>SINTA Summary</h4><table class='table table-striped'><thead><tr><th>Scopus</th><th>GScholar</th><th>WOS</th></tr></thead><tbody>";
-                summaryHtml += "<tr><td>Articles: " + data.summary.Scopus.Article + "<br>Citations: " + data.summary.Scopus.Citation + "<br>Cited Documents: " + data.summary.Scopus["Cited Document"] + "<br>H-Index: " + data.summary.Scopus["H-Index"] + "<br>i10-Index: " + data.summary.Scopus["i10-Index"] + "<br>G-Index: " + data.summary.Scopus["G-Index"] + "</td>";
-                summaryHtml += "<td>Articles: " + data.summary.GScholar.Article + "<br>Citations: " + data.summary.GScholar.Citation + "<br>Cited Documents: " + data.summary.GScholar["Cited Document"] + "<br>H-Index: " + data.summary.GScholar["H-Index"] + "<br>i10-Index: " + data.summary.GScholar["i10-Index"] + "<br>G-Index: " + data.summary.GScholar["G-Index"] + "</td>";
-                summaryHtml += "<td>Articles: " + data.summary.WOS.Article + "<br>Citations: " + data.summary.WOS.Citation + "<br>Cited Documents: " + data.summary.WOS["Cited Document"] + "<br>H-Index: " + data.summary.WOS["H-Index"] + "<br>i10-Index: " + data.summary.WOS["i10-Index"] + "<br>G-Index: " + data.summary.WOS["G-Index"] + "</td>";
-                summaryHtml += "</tr></tbody></table>";
+                var summaryHtml = `
+                    <h4 class="section-title">SINTA Summary</h4>
+                    <ul>
+                        <li><strong>Scopus</strong>
+                            <ul>
+                                <li>Articles: ${data.summary.Scopus.Article}</li>
+                                <li>Citations: ${data.summary.Scopus.Citation}</li>
+                                <li>Cited Documents: ${data.summary.Scopus["Cited Document"]}</li>
+                                <li>H-Index: ${data.summary.Scopus["H-Index"]}</li>
+                                <li>i10-Index: ${data.summary.Scopus["i10-Index"]}</li>
+                                <li>G-Index: ${data.summary.Scopus["G-Index"]}</li>
+                            </ul>
+                        </li>
+                        <li><strong>Google Scholar</strong>
+                            <ul>
+                                <li>Articles: ${data.summary.GScholar.Article}</li>
+                                <li>Citations: ${data.summary.GScholar.Citation}</li>
+                                <li>Cited Documents: ${data.summary.GScholar["Cited Document"]}</li>
+                                <li>H-Index: ${data.summary.GScholar["H-Index"]}</li>
+                                <li>i10-Index: ${data.summary.GScholar["i10-Index"]}</li>
+                                <li>G-Index: ${data.summary.GScholar["G-Index"]}</li>
+                            </ul>
+                        </li>
+                        <li><strong>WOS</strong>
+                            <ul>
+                                <li>Articles: ${data.summary.WOS.Article}</li>
+                                <li>Citations: ${data.summary.WOS.Citation}</li>
+                                <li>Cited Documents: ${data.summary.WOS["Cited Document"]}</li>
+                                <li>H-Index: ${data.summary.WOS["H-Index"]}</li>
+                                <li>i10-Index: ${data.summary.WOS["i10-Index"]}</li>
+                                <li>G-Index: ${data.summary.WOS["G-Index"]}</li>
+                            </ul>
+                        </li>
+                    </ul>
+                `;
                 sintaInfo.innerHTML += summaryHtml;
-            });
-
-        fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=research')
-            .then(response => response.json())
-            .then(data => {
-                var researchHtml = "<h4>Research</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Leader</th><th>Members</th><th>Funding Source</th><th>Year</th><th>Amount</th></tr></thead><tbody>";
-                data.forEach(item => {
-                    researchHtml += "<tr><td>" + item.title + "</td><td>" + item.leader + "</td><td>" + item.members.join(", ") + "</td><td>" + item.funding_source + "</td><td>" + item.year + "</td><td>" + item.amount + "</td></tr>";
-                });
-                researchHtml += "</tbody></table>";
-                sintaInfo.innerHTML += researchHtml;
-            });
-
-        fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=ipr')
-            .then(response => response.json())
-            .then(data => {
-                var iprHtml = "<h4>Intellectual Property Rights (IPR)</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Inventors</th><th>Year</th><th>Application Number</th><th>Type</th></thead><tbody>";
-                data.forEach(item => {
-                    iprHtml += "<tr><td>" + item.title + "</td><td>" + item.inventors + "</td><td>" + item.year + "</td><td>" + item.application_number + "</td><td>" + item.ipr_type + "</td></tr>";
-                });
-                iprHtml += "</tbody></table>";
-                sintaInfo.innerHTML += iprHtml;
-            });
-
-        fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=cs')
-            .then(response => response.json())
-            .then(data => {
-                var csHtml = "<h4>Community Services</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Leader</th><th>Members</th><th>Funding Source</th><th>Year</th><th>Amount</th></thead><tbody>";
-                data.forEach(item => {
-                    csHtml += "<tr><td>" + item.title + "</td><td>" + item.leader + "</td><td>" + item.members.join(", ") + "</td><td>" + item.funding_source + "</td><td>" + item.year + "</td><td>" + item.amount + "</td></tr>";
-                });
-                csHtml += "</tbody></table>";
-                sintaInfo.innerHTML += csHtml;
-            });
-
-        fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=scopus')
-            .then(response => response.json())
-            .then(data => {
-                var scopusHtml = "<h4>Scopus Articles</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Author Order</th><th>Quartile</th><th>Publisher</th><th>Year</th><th>Citations</th></thead><tbody>";
-                data.forEach(item => {
-                    scopusHtml += "<tr><td>" + item.title + "</td><td>" + item.author_order + "</td><td>" + item.quartile + "</td><td>" + item.publisher + "</td><td>" + item.year + "</td><td>" + item.cited + "</td></tr>";
-                });
-                scopusHtml += "</tbody></table>";
-                sintaInfo.innerHTML += scopusHtml;
             });
     }
 
@@ -140,28 +152,30 @@
         fetch('https://ilkom.unila.ac.id/site/asiin/gs_api.php?user=' + gsId + '&sortby=pubdate')
             .then(response => response.json())
             .then(data => {
-                var last5Html = "<h4>Last Publications</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Citations</th></thead><tbody>";
-                data.forEach(item => {
-                    last5Html += "<tr><td>" + item.title + "</td><td>" + item.authors + "</td><td>" + item.publisher + "</td><td>" + item.year + "</td><td>" + item.cited + "</td></tr>";
-                });
-                last5Html += "</tbody></table>";
+                var last5Html = `
+                    <h4 class="section-title">Last Publications</h4>
+                    <ul>
+                        ${data.map(item => `
+                            <li><strong>${item.title}</strong> (${item.authors}) - ${item.publisher}, ${item.year} (Cited: ${item.cited})</li>
+                        `).join('')}
+                    </ul>
+                `;
                 gsInfo.innerHTML += last5Html;
 
                 fetch('https://ilkom.unila.ac.id/site/asiin/gs_api.php?user=' + gsId + '&sortby=citations')
-                .then(response => response.json())
-                .then(data => {
-                    var topCitedHtml = "<h4>Top 5 Most Cited Publications</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Authors</th><th>Publisher</th><th>Year</th><th>Citations</th></tr></thead><tbody>";
-
-                    // Use slice to limit the data to the first 5 items
-                    data.slice(0, 5).forEach(item => {
-                        topCitedHtml += "<tr><td>" + item.title + "</td><td>" + item.authors + "</td><td>" + item.publisher + "</td><td>" + item.year + "</td><td>" + item.cited + "</td></tr>";
-                    });
-
-                    topCitedHtml += "</tbody></table>";
-                    gsInfo.innerHTML += topCitedHtml;
-                })
-                .catch(error => console.error('Error fetching top cited publications:', error));
-
+                    .then(response => response.json())
+                    .then(data => {
+                        var topCitedHtml = `
+                            <h4 class="section-title">Top 5 Most Cited Publications</h4>
+                            <ul>
+                                ${data.slice(0, 5).map(item => `
+                                    <li><strong>${item.title}</strong> (${item.authors}) - ${item.publisher}, ${item.year} (Cited: ${item.cited})</li>
+                                `).join('')}
+                            </ul>
+                        `;
+                        gsInfo.innerHTML += topCitedHtml;
+                    })
+                    .catch(error => console.error('Error fetching top cited publications:', error));
             });
     }
 </script>
