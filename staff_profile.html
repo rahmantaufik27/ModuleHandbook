@@ -72,27 +72,27 @@
             .then(data => {
                 var profileInfo = document.getElementById('profile-details');
                 if (data) {
-                    document.getElementById('profile-photo').innerHTML = '<img src="' + (data["PHOTO"] || 'default-photo.jpg') + '" alt="Profile Photo" class="img-fluid">';
+                    document.getElementById('profile-photo').innerHTML = '<img src="' + (data.profile_image || 'default-photo.jpg') + '" alt="Profile Photo" class="img-fluid">';
                     profileInfo.innerHTML = `
-                        <li><strong>Name:</strong> ${data["NAME"]}</li>
-                        <li><strong>NIDN:</strong> ${data["NIDN"]}</li>
-                        <li><strong>Position:</strong> ${data["POSITION"]}</li>
-                        <li><strong>Academic Career:</strong> ${data["ACADEMIC CAREER"]}</li>
+                        <li><strong>Name:</strong> ${data.NAME}</li>
+                        <li><strong>NIDN:</strong> ${data.NIDN}</li>
+                        <li><strong>Position:</strong> ${data.POSITION}</li>
+                        <li><strong>Academic Career:</strong> ${data.ACADEMIC_CAREER}</li>
                         <li><strong>Education:</strong>
                             <ul>
-                                <li><strong>Bachelor:</strong> ${data["Pendidikan S1"]} (Year: ${data["Tahun Lulus S1"]})</li>
-                                <li><strong>Master:</strong> ${data["Pendidikan S2"]} (Year: ${data["Tahun Lulus S2"]})</li>
-                                <li><strong>Doctorate:</strong> ${data["Pendidikan S3"] || '-'} (Year: ${data["Tahun Lulus S3"] || '-'})</li>
+                                <li><strong>Bachelor:</strong> ${data['Pendidikan S1']} (Year: ${data['Tahun Lulus S1']})</li>
+                                <li><strong>Master:</strong> ${data['Pendidikan S2']} (Year: ${data['Tahun Lulus S2']})</li>
+                                <li><strong>Doctorate:</strong> ${data['Pendidikan S3'] || '-'} (Year: ${data['Tahun Lulus S3'] || '-'})</li>
                             </ul>
                         </li>
                     `;
 
-                    if (data["SINTA ID"]) {
-                        fetchSintaData(data["SINTA ID"]);
+                    if (data.SINTA_ID) {
+                        fetchSintaData(data.SINTA_ID);
                     }
 
-                    if (data["GS ID"]) {
-                        fetchGSData(data["GS ID"]);
+                    if (data.GS_ID) {
+                        fetchGSData(data.GS_ID);
                     }
                 } else {
                     profileInfo.innerHTML = '<div class="alert alert-danger">Profile not found.</div>';
@@ -109,38 +109,48 @@
             .then(data => {
                 var summaryHtml = `
                     <h4 class="section-title">SINTA Summary</h4>
-                    <ul>
-                        <li><strong>Scopus</strong>
-                            <ul>
-                                <li>Articles: ${data.summary.Scopus.Article}</li>
-                                <li>Citations: ${data.summary.Scopus.Citation}</li>
-                                <li>Cited Documents: ${data.summary.Scopus["Cited Document"]}</li>
-                                <li>H-Index: ${data.summary.Scopus["H-Index"]}</li>
-                                <li>i10-Index: ${data.summary.Scopus["i10-Index"]}</li>
-                                <li>G-Index: ${data.summary.Scopus["G-Index"]}</li>
-                            </ul>
-                        </li>
-                        <li><strong>Google Scholar</strong>
-                            <ul>
-                                <li>Articles: ${data.summary.GScholar.Article}</li>
-                                <li>Citations: ${data.summary.GScholar.Citation}</li>
-                                <li>Cited Documents: ${data.summary.GScholar["Cited Document"]}</li>
-                                <li>H-Index: ${data.summary.GScholar["H-Index"]}</li>
-                                <li>i10-Index: ${data.summary.GScholar["i10-Index"]}</li>
-                                <li>G-Index: ${data.summary.GScholar["G-Index"]}</li>
-                            </ul>
-                        </li>
-                        <li><strong>WOS</strong>
-                            <ul>
-                                <li>Articles: ${data.summary.WOS.Article}</li>
-                                <li>Citations: ${data.summary.WOS.Citation}</li>
-                                <li>Cited Documents: ${data.summary.WOS["Cited Document"]}</li>
-                                <li>H-Index: ${data.summary.WOS["H-Index"]}</li>
-                                <li>i10-Index: ${data.summary.WOS["i10-Index"]}</li>
-                                <li>G-Index: ${data.summary.WOS["G-Index"]}</li>
-                            </ul>
-                        </li>
-                    </ul>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Articles</th>
+                                <th>Citations</th>
+                                <th>Cited Documents</th>
+                                <th>H-Index</th>
+                                <th>i10-Index</th>
+                                <th>G-Index</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Scopus</td>
+                                <td>${data.summary.Scopus.Article}</td>
+                                <td>${data.summary.Scopus.Citation}</td>
+                                <td>${data.summary.Scopus['Cited Document']}</td>
+                                <td>${data.summary.Scopus['H-Index']}</td>
+                                <td>${data.summary.Scopus['i10-Index']}</td>
+                                <td>${data.summary.Scopus['G-Index']}</td>
+                            </tr>
+                            <tr>
+                                <td>Google Scholar</td>
+                                <td>${data.summary.GScholar.Article}</td>
+                                <td>${data.summary.GScholar.Citation}</td>
+                                <td>${data.summary.GScholar['Cited Document']}</td>
+                                <td>${data.summary.GScholar['H-Index']}</td>
+                                <td>${data.summary.GScholar['i10-Index']}</td>
+                                <td>${data.summary.GScholar['G-Index']}</td>
+                            </tr>
+                            <tr>
+                                <td>WOS</td>
+                                <td>${data.summary.WOS.Article}</td>
+                                <td>${data.summary.WOS.Citation}</td>
+                                <td>${data.summary.WOS['Cited Document']}</td>
+                                <td>${data.summary.WOS['H-Index']}</td>
+                                <td>${data.summary.WOS['i10-Index']}</td>
+                                <td>${data.summary.WOS['G-Index']}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 `;
                 sintaInfo.innerHTML += summaryHtml;
             });
