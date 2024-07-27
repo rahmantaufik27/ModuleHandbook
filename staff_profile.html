@@ -138,15 +138,24 @@
             });
 
         fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=cs')
-            .then(response => response.json())
-            .then(data => {
-                var csHtml = "<h4>Community Services</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Leader</th><th>Members</th><th>Funding Source</th><th>Year</th><th>Amount</th></thead><tbody>";
-                data.forEach(item => {
-                    csHtml += "<tr><td>" + item.title + "</td><td>" + item.leader + "</td><td>" + item.members.join(", ") + "</td><td>" + item.funding_source + "</td><td>" + item.year + "</td><td>" + item.amount + "</td></tr>";
-                });
-                csHtml += "</tbody></table>";
-                sintaInfo.innerHTML += csHtml;
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            var csHtml = "<h4>Community Services</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Leader</th><th>Members</th><th>Funding Source</th><th>Year</th><th>Amount</th></thead><tbody>";
+            data.forEach(item => {
+                csHtml += "<tr><td>" + item.title + "</td><td>" + item.leader + "</td><td>" + item.members.join(", ") + "</td><td>" + item.funding_source + "</td><td>" + item.year + "</td><td>" + item.amount + "</td></tr>";
             });
+            csHtml += "</tbody></table>";
+            sintaInfo.innerHTML += csHtml;
+        })
+        .catch(error => {
+            console.error('Error fetching Community Services data:', error);
+            sintaInfo.innerHTML += '<div class="alert alert-danger">Failed to load Community Services data. Please try again later.</div>';
+        });
 
         fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=scopus')
             .then(response => response.json())
