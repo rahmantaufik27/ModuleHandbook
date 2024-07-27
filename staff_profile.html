@@ -97,15 +97,16 @@
                 });
 
             fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + sid + '&type=summary')
-                .then(response => response.json())
-                .then(data => {
-                    var summaryHtml = "<h4>Ringkasan SINTA</h4><table class='table table-striped'><thead><tr><th>Scopus</th><th>GScholar</th><th>WOS</th></tr></thead><tbody>";
-                    summaryHtml += "<tr><td>Article: " + data.summary.Scopus.Article + "<br>Citation: " + data.summary.Scopus.Citation + "<br>Cited Document: " + data.summary.Scopus.Cited_Document + "<br>H-Index: " + data.summary.Scopus.H_Index + "<br>i10-Index: " + data.summary.Scopus.i10_Index + "<br>G-Index: " + data.summary.Scopus.G_Index + "</td>";
-                    summaryHtml += "<td>Article: " + data.summary.GScholar.Article + "<br>Citation: " + data.summary.GScholar.Citation + "<br>Cited Document: " + data.summary.GScholar.Cited_Document + "<br>H-Index: " + data.summary.GScholar.H_Index + "<br>i10-Index: " + data.summary.GScholar.i10_Index + "<br>G-Index: " + data.summary.GScholar.G_Index + "</td>";
-                    summaryHtml += "<td>Article: " + data.summary.WOS.Article + "<br>Citation: " + data.summary.WOS.Citation + "<br>Cited Document: " + data.summary.WOS.Cited_Document + "<br>H-Index: " + data.summary.WOS.H_Index + "<br>i10-Index: " + data.summary.WOS.i10_Index + "<br>G-Index: " + data.summary.WOS.G_Index + "</td>";
-                    summaryHtml += "</tr></tbody></table>";
-                    sintaInfo.innerHTML += summaryHtml;
-                });
+            .then(response => response.json())
+            .then(data => {
+                var summaryHtml = "<h4>Ringkasan SINTA</h4><table class='table table-striped'><thead><tr><th>Scopus</th><th>GScholar</th><th>WOS</th></tr></thead><tbody>";
+                summaryHtml += "<tr><td>Article: " + data.summary.Scopus.Article + "<br>Citation: " + data.summary.Scopus.Citation + "<br>Cited Document: " + data.summary.Scopus["Cited Document"] + "<br>H-Index: " + data.summary.Scopus["H-Index"] + "<br>i10-Index: " + data.summary.Scopus["i10-Index"] + "<br>G-Index: " + data.summary.Scopus["G-Index"] + "</td>";
+                summaryHtml += "<td>Article: " + data.summary.GScholar.Article + "<br>Citation: " + data.summary.GScholar.Citation + "<br>Cited Document: " + data.summary.GScholar["Cited Document"] + "<br>H-Index: " + data.summary.GScholar["H-Index"] + "<br>i10-Index: " + data.summary.GScholar["i10-Index"] + "<br>G-Index: " + data.summary.GScholar["G-Index"] + "</td>";
+                summaryHtml += "<td>Article: " + data.summary.WOS.Article + "<br>Citation: " + data.summary.WOS.Citation + "<br>Cited Document: " + data.summary.WOS["Cited Document"] + "<br>H-Index: " + data.summary.WOS["H-Index"] + "<br>i10-Index: " + data.summary.WOS["i10-Index"] + "<br>G-Index: " + data.summary.WOS["G-Index"] + "</td>";
+                summaryHtml += "</tr></tbody></table>";
+                sintaInfo.innerHTML += summaryHtml;
+            });
+
         }
 
         function fetchGSData(gsId) {
