@@ -17,7 +17,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var nidn = new URLSearchParams(window.location.search).get('nidn');
-        var profileUrl = 'staff_handbook.php?nidn=' + nidn;
+        var profileUrl = 'https://ilkom.unila.ac.id/site/asiin/staff_handbook.php?nidn=' + nidn;
 
         fetch(profileUrl)
             .then(response => response.json())
