@@ -32,9 +32,8 @@
             color: #007bff;
             text-decoration: none;
         }
-        .profile-affil a {
+        .profile-affil {
             color: #6c757d;
-            text-decoration: none;
         }
         .profile-id, .profile-dept {
             color: #6c757d;
@@ -56,16 +55,23 @@
             .then(data => {
                 var staffList = document.getElementById('staff-list');
                 data.forEach(profile => {
-                    var profilePhoto = 'https://sinta.kemdikbud.go.id/public/assets/img/author-small.png'; // Default image
+                    var profilePhoto = 'https://sinta.kemdikbud.go.id/public/assets/img/author-small.png';
                     var profileLink = 'https://ilkom.unila.ac.id/site/asiin/staff_profile.html?nidn=' + profile['NIDN'];
 
-                    // Fetch SINTA summary to get the profile image
                     fetch('https://ilkom.unila.ac.id/site/asiin/sinta_api.php?sid=' + profile['SINTA ID'] + '&type=summary')
                         .then(response => response.json())
                         .then(sintaData => {
                             if (sintaData && sintaData.profile_image) {
                                 profilePhoto = sintaData.profile_image;
                             }
+
+                            var educationHtml = `
+                                <div class="profile-affil">
+                                    <i class="el el-map-marker mr-1"></i> Bachelor: ${profile['Pendidikan S1']} (Year: ${profile['Tahun Lulus S1'] || '-'})<br>
+                                    <i class="el el-map-marker mr-1"></i> Master: ${profile['Pendidikan S2']} (Year: ${profile['Tahun Lulus S2'] || '-'})<br>
+                                    <i class="el el-map-marker mr-1"></i> Doctorate: ${profile['Pendidikan S3'] || '-'} (Year: ${profile['Tahun Lulus S3'] || '-'})
+                                </div>
+                            `;
 
                             var staffHtml = `
                                 <div class="staff-item row">
@@ -76,13 +82,10 @@
                                         <div class="profile-name">
                                             <a href="${profileLink}">${profile['NAME']}</a> <i class="el el-ok-sign text-success ml-2"></i>
                                         </div>
-                                        <div class="profile-affil">
-                                            <i class="el el-map-marker mr-1"></i> Universitas Bina Nusantara
-                                        </div>
+                                        ${educationHtml}
                                         <div class="profile-dept">${profile['POSITION']}</div>
                                         <div class="profile-id">
-                                            <i class="el el-user mr-1"></i>NIDN: ${profile['NIDN']} <span class="fi fi-id ml-1"></span><br>
-                                            <i class="el el-user mr-1"></i>SINTA ID: ${profile['SINTA ID']} <span class="fi fi-id ml-1"></span>
+                                            <i class="el el-user mr-1"></i>NIDN: ${profile['NIDN']} | SINTA ID: ${profile['SINTA ID']} <span class="fi fi-id ml-1"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -91,8 +94,15 @@
                         })
                         .catch(error => {
                             console.error('Error fetching SINTA summary:', error);
-                            // Use default profile photo and fill in other data
-                            var staffHtml = `
+                            var educationHtmlFallback = `
+                                <div class="profile-affil">
+                                    <i class="el el-map-marker mr-1"></i> Bachelor: ${profile['Pendidikan S1']} (Year: ${profile['Tahun Lulus S1'] || '-'})<br>
+                                    <i class="el el-map-marker mr-1"></i> Master: ${profile['Pendidikan S2']} (Year: ${profile['Tahun Lulus S2'] || '-'})<br>
+                                    <i class="el el-map-marker mr-1"></i> Doctorate: ${profile['Pendidikan S3'] || '-'} (Year: ${profile['Tahun Lulus S3'] || '-'})
+                                </div>
+                            `;
+
+                            var staffHtmlFallback = `
                                 <div class="staff-item row">
                                     <div class="col-3 col-sm-4 col-md-3">
                                         <img src="${profilePhoto}" onerror="this.onerror=null;this.src='https://sinta.kemdikbud.go.id/public/assets/img/author-small.png';" alt="avatar" class="img-thumbnail avatar">
@@ -101,18 +111,15 @@
                                         <div class="profile-name">
                                             <a href="${profileLink}">${profile['NAME']}</a> <i class="el el-ok-sign text-success ml-2"></i>
                                         </div>
-                                        <div class="profile-affil">
-                                            <i class="el el-map-marker mr-1"></i> Universitas Bina Nusantara
-                                        </div>
+                                        ${educationHtmlFallback}
                                         <div class="profile-dept">${profile['POSITION']}</div>
                                         <div class="profile-id">
-                                            <i class="el el-user mr-1"></i>NIDN: ${profile['NIDN']} <span class="fi fi-id ml-1"></span><br>
-                                            <i class="el el-user mr-1"></i>SINTA ID: ${profile['SINTA ID']} <span class="fi fi-id ml-1"></span>
+                                            <i class="el el-user mr-1"></i>NIDN: ${profile['NIDN']} | SINTA ID: ${profile['SINTA ID']} <span class="fi fi-id ml-1"></span>
                                         </div>
                                     </div>
                                 </div>
                             `;
-                            staffList.innerHTML += staffHtml;
+                            staffList.innerHTML += staffHtmlFallback;
                         });
                 });
             })
