@@ -20,10 +20,6 @@ Endpoint API dapat diakses dengan menambahkan parameter `sid` (SINTA ID) dan `ty
 
 Endpoint: `/sinta_api.php?sid=6021756&type=research`
 
-json
-
-Copy code
-
 `[
     {
         "title": "Judul Penelitian",
@@ -39,10 +35,6 @@ Copy code
 #### 2. Mendapatkan Data Layanan Masyarakat
 
 Endpoint: `/sinta_api.php?sid=6021756&type=cs`
-
-json
-
-Copy code
 
 `[
     {
@@ -89,10 +81,6 @@ Endpoint: `/sinta_api.php?sid=6021756&type=scopus`
 #### 5. Mendapatkan Data Buku
 
 Endpoint: `/sinta_api.php?sid=6021756&type=books`
-
-json
-
-Copy code
 
 ``[
     {
@@ -150,10 +138,6 @@ Jika parameter `sid` atau `type` tidak diberikan atau tipe data yang diberikan t
 -   **Symfony HttpClient**: Digunakan untuk membuat permintaan HTTP
 
 Instalasi dapat dilakukan dengan menggunakan Composer:
-
-bash
-
-Copy code
 
 `composer require fabpot/goutte
 composer require symfony/http-client` 
