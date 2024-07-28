@@ -177,7 +177,34 @@ function sintaSummary($sid) {
     return json_encode($result, JSON_PRETTY_PRINT);
 }
 
-// Contoh penggunaan fungsi:
+function getBooks($sid) {
+    $client = new Client(HttpClient::create(['timeout' => 60]));
+    $url = 'https://sinta.kemdikbud.go.id/authors/profile/' . $sid . '/?view=books';
+    $crawler = $client->request('GET', $url);
+
+    $books = [];
+
+    $crawler->filter('.ar-list-item')->each(function ($node) use (&$books) {
+        $title = $node->filter('.ar-title a')->text();
+        $author = $node->filter('.ar-meta a')->eq(1)->text();
+        $publisher = $node->filter('.ar-meta a.ar-pub')->text();
+        $year = $node->filter('.ar-year')->text();
+        $city = $node->filter('.ar-cited')->text();
+        $isbn = $node->filter('.ar-quartile')->text();
+
+        $books[] = [
+            'title' => $title,
+            'author' => $author,
+            'publisher' => $publisher,
+            'year' => $year,
+            'city' => $city,
+            'isbn' => $isbn,
+        ];
+    });
+
+    return json_encode($books, JSON_PRETTY_PRINT);
+}
+
 if (isset($_GET['sid']) && isset($_GET['type'])) {
     $sid = $_GET['sid'];
     $type = $_GET['type'];
@@ -197,6 +224,9 @@ if (isset($_GET['sid']) && isset($_GET['type'])) {
         case 'scopus':
             echo getScopusArticles($sid);
             break;
+        case 'books':
+            echo getBooks($sid);
+            break;
         case 'summary':
             echo sintaSummary($sid);
             break;
@@ -206,3 +236,4 @@ if (isset($_GET['sid']) && isset($_GET['type'])) {
 } else {
     echo json_encode(['error' => 'Missing sid or type parameter.']);
 }
+?>
