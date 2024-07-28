@@ -207,12 +207,13 @@
             .then(response => response.json())
             .then(data => {
                 var booksHtml = "<h4>Books</h4><table class='table table-striped'><thead><tr><th>Title</th><th>Author</th><th>Publisher</th><th>Year</th><th>City</th><th>ISBN</th></tr></thead><tbody>";
-                data.forEach(item => {
-                    booksHtml += "<tr><td>" + item.title + "</td><td>" + item.author + "</td><td>" + item.publisher + "</td><td>" + item.year + "</td><td>" + item.city + "</td><td>" + item.isbn + "</td></tr>";
-                });
-                booksHtml += "</tbody></table>";
-                sintaInfo.innerHTML += booksHtml;
-
+                 if (data && data.length > 0) {
+                    data.forEach(item => {
+                        booksHtml += "<tr><td>" + item.title + "</td><td>" + item.author + "</td><td>" + item.publisher + "</td><td>" + item.year + "</td><td>" + item.city + "</td><td>" + item.isbn + "</td></tr>";
+                    });
+                    booksHtml += "</tbody></table>";
+                    sintaInfo.innerHTML += booksHtml;
+                 }
                 // Fetch subsequent data sequentially
                 fetchScopusArticlesData(sid);
             });
