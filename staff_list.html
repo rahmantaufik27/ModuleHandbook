@@ -80,10 +80,9 @@
                                     </div>
                                     <div class="col col-sm-8">
                                         <div class="profile-name">
-                                            <a href="${profileLink}">${profile['NAME']}</a> <i class="el el-ok-sign text-success ml-2"></i>
+                                            <a href="${profileLink}">${profile['NAME']}</a> (${profile['POSITION']})
                                         </div>
                                         ${educationHtml}
-                                        <div class="profile-dept">${profile['POSITION']}</div>
                                         <div class="profile-id">
                                             <i class="el el-user mr-1"></i>NIDN: ${profile['NIDN']} | SINTA ID: ${profile['SINTA ID']} <span class="fi fi-id ml-1"></span>
                                         </div>
@@ -101,7 +100,7 @@
                                     <i class="el el-map-marker mr-1"></i> Doctorate: ${profile['Pendidikan S3'] || '-'} (Year: ${profile['Tahun Lulus S3'] || '-'})
                                 </div>
                             `;
-
+                            
                             var staffHtmlFallback = `
                                 <div class="staff-item row">
                                     <div class="col-3 col-sm-4 col-md-3">
@@ -109,10 +108,9 @@
                                     </div>
                                     <div class="col col-sm-8">
                                         <div class="profile-name">
-                                            <a href="${profileLink}">${profile['NAME']}</a> (${profile['POSITION']})</i>
+                                            <a href="${profileLink}">${profile['NAME']}</a> (${profile['POSITION']})
                                         </div>
                                         ${educationHtmlFallback}
-                                        
                                         <div class="profile-id">
                                             <i class="el el-user mr-1"></i>NIDN: ${profile['NIDN']} | SINTA ID: ${profile['SINTA ID']} <span class="fi fi-id ml-1"></span>
                                         </div>
