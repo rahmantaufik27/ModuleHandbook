@@ -1,7 +1,7 @@
 
 # SINTA API
 
-API ini menyediakan akses ke berbagai data profil peneliti dari portal SINTA (Science and Technology Index) berdasarkan `SINTA ID` yang diberikan. Data yang dapat diambil meliputi penelitian, layanan masyarakat, kekayaan intelektual, artikel Scopus, buku, dan ringkasan profil.
+API ini menyediakan akses ke berbagai data profil peneliti dari portal SINTA (Science and Technology Index) berdasarkan `SINTA ID` yang diberikan. Data yang dapat diambil meliputi penelitian, Pengabdian kepada Masyarakat (PkM), kekayaan intelektual, artikel Scopus, buku, dan ringkasan profil.
 
 ## Cara Penggunaan
 
