@@ -8,7 +8,7 @@ API ini menyediakan akses ke berbagai data profil peneliti dari portal SINTA (Sc
 Endpoint API dapat diakses dengan menambahkan parameter `sid` (SINTA ID) dan `type` (tipe data) pada URL. Berikut adalah tipe data yang tersedia:
 
 -   `research` - Untuk mengambil data penelitian
--   `cs` - Untuk mengambil data layanan masyarakat (Community Service)
+-   `cs` - Untuk mengambil data PkM (Community Service)
 -   `ipr` - Untuk mengambil data kekayaan intelektual (Intellectual Property Rights)
 -   `scopus` - Untuk mengambil data artikel yang terindeks di Scopus
 -   `books` - Untuk mengambil data buku
@@ -32,7 +32,7 @@ Endpoint: `/sinta_api.php?sid=6021756&type=research`
     ...
 ]` 
 
-#### 2. Mendapatkan Data Layanan Masyarakat
+#### 2. Mendapatkan Data PkM
 
 Endpoint: `/sinta_api.php?sid=6021756&type=cs`
 
