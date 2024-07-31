@@ -139,8 +139,8 @@ Jika parameter `sid` atau `type` tidak diberikan atau tipe data yang diberikan t
 
 Instalasi dapat dilakukan dengan menggunakan Composer:
 
-`composer require fabpot/goutte
-composer require symfony/http-client` 
+- `composer require fabpot/goutte`
+- `composer require symfony/http-client` 
 
 ## Lisensi
 
